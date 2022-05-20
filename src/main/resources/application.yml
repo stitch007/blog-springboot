@@ -1,0 +1,50 @@
+server:
+  port: 9110
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://xxx:3306/blog?useUnicode=true&characterEncoding=utf8&connectionTimeZone=Asia/Shanghai&forceConnectionTimeZoneToSession=true
+    username: xxx
+    password: xxx
+  mvc:
+    throw-exception-if-no-handler-found: true
+  redis:
+    host: xxx
+    port: 6379
+    database: 0
+    password: xxx
+    timeout: 3000
+    lettuce:
+      pool:
+        max-active: 200
+        max-wait: -1
+        max-idle: 10
+        min-idle: 0
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 20MB
+  cos:
+    secret-id: xxx
+    secret-key: xxx
+    base-url: xxx
+    region: xxx
+    bucket: xxx
+    folder: xxx
+
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  mapper-locations: classpath:mapper/*.xml
+
+sa-token:
+  jwt-secret-key: xxx
+  token-name: Authorization
+  timeout: 2592000
+  is-concurrent: true
+  is-log: true
+  is-read-cookie: false

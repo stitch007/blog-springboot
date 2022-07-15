@@ -5,8 +5,6 @@
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="content" column="content"/>
-        <result property="summary" column="summary"/>
-        <result property="coverImage" column="cover_image"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
         <collection property="category" ofType="run.stitch.blog.dto.CategoryDTO">
@@ -27,16 +25,12 @@
                t.name as tag_name,
                a.title,
                a.content,
-               a.summary,
-               a.cover_image,
                a.create_time,
                a.update_time
         from (select id,
                      category_id,
                      title,
                      content,
-                     summary,
-                     cover_image,
                      create_time,
                      update_time
               from article
@@ -55,16 +49,12 @@
                t.name as tag_name,
                a.title,
                a.content,
-               a.summary,
-               a.cover_image,
                a.create_time,
                a.update_time
         from (select id,
                      category_id,
                      title,
                      content,
-                     summary,
-                     cover_image,
                      create_time,
                      update_time
               from article
@@ -83,16 +73,12 @@
                t.name as tag_name,
                a.title,
                a.content,
-               a.summary,
-               a.cover_image,
                a.create_time,
                a.update_time
         from (select id,
                      category_id,
                      title,
                      content,
-                     summary,
-                     cover_image,
                      create_time,
                      update_time
               from article

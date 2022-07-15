@@ -1,10 +1,9 @@
 FROM maven:3.8.4-openjdk-17 AS builder
 
-VOLUME /root/.m2:/root/.m2
+VOLUME /root/.m2/repository:/root/.m2/repository
 
-COPY ./settings.xml /usr/share/maven/conf/settings.xml
-COPY ./pom.xml pom.xml
-COPY ./src src/
+COPY pom.xml pom.xml
+COPY src/ src/
 
 RUN mvn clean package -Dmaven.test.skip=true
 

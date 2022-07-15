@@ -1,6 +1,8 @@
 package run.stitch.blog.service;
 
 import run.stitch.blog.dto.ArticleDTO;
+import run.stitch.blog.dto.params.SaveArticleParam;
+import run.stitch.blog.dto.params.UpdateArticleParam;
 
 import java.util.List;
 
@@ -11,9 +13,9 @@ public interface ArticleService {
 
     ArticleDTO getArticleByTitle(String title);
 
-    Integer saveArticle(ArticleDTO articleDTO);
+    Integer saveArticle(SaveArticleParam saveArticleParam);
 
-    Integer updateArticle(ArticleDTO articleDTO);
+    Integer updateArticle(UpdateArticleParam updateArticleParam);
 
     boolean deleteArticles(String[] ids);
 }

@@ -12,6 +12,8 @@ import run.stitch.blog.util.Result;
 
 import java.util.HashMap;
 
+import static run.stitch.blog.util.StatusCode.*;
+
 @RestController
 public class UploadController {
     @Autowired
@@ -21,16 +23,16 @@ public class UploadController {
     @PostMapping("/upload/image")
     public Result<?> uploadImageToCos(@RequestParam(value = "file") MultipartFile file) {
         if (ObjectUtils.isEmpty(file)) {
-            return Result.error(401, "文件不能为空");
+            return Result.error(FAIL);
         }
         String originalFileName = file.getOriginalFilename();
         if (ObjectUtils.isEmpty(originalFileName)) {
-            return Result.error(401, "获取文件信息失败");
+            return Result.error(FAIL);
         }
         int index = originalFileName.lastIndexOf(".");
         String suffix = originalFileName.substring(index);
         if (!suffix.equals(".jpg") && !suffix.equals(".png") && !suffix.equals(".jpeg")) {
-            return Result.error(401, "仅支持jpg、png、jpeg格式");
+            return Result.error(FAIL);
         }
         String fileName = originalFileName.substring(0, index) + "-" + System.currentTimeMillis() + suffix;
         return Result.ok(new HashMap<>() {{

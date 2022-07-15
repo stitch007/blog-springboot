@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import run.stitch.blog.dto.TalkDTO;
+import run.stitch.blog.dto.params.SaveTalkParam;
+import run.stitch.blog.dto.params.UpdateTalkParam;
 import run.stitch.blog.entity.Talk;
 import run.stitch.blog.repository.TalkRepository;
 import run.stitch.blog.service.TalkService;
@@ -31,15 +33,22 @@ public class TalkServiceImpl implements TalkService {
     }
 
     @Override
-    public Integer saveOrUpdateTalk(TalkDTO talkDTO) {
-        Talk talk = Copy.copyObject(talkDTO, Talk.class);
-        if (talk.getId() == null) {
-            talk.setUserId(Integer.parseInt(StpUtil.getLoginId().toString()));
-            talkRepository.insert(talk);
+    public Integer saveTalk(SaveTalkParam saveTalkParam) {
+        Talk talk = Copy.copyObject(saveTalkParam, Talk.class);
+        talk.setUserId(Integer.parseInt(StpUtil.getLoginId().toString()));
+        if (talkRepository.insert(talk) > 0) {
             return talk.getId();
         }
-        talkRepository.updateById(talk);
-        return talk.getId();
+        return null;
+    }
+
+    @Override
+    public Integer updateTalk(UpdateTalkParam updateTalkParam) {
+        Talk talk = Copy.copyObject(updateTalkParam, Talk.class);
+        if (talkRepository.updateById(talk) >= 0) {
+            return talk.getId();
+        }
+        return null;
     }
 
     @Override

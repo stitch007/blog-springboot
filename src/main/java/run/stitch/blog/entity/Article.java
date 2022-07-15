@@ -27,10 +27,6 @@ public class Article {
 
     private String content;
 
-    private String summary;
-
-    private String coverImage;
-
     // 1-已删除，0-未删除
     private Boolean deleted;
 

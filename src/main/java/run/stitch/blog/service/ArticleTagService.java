@@ -3,7 +3,7 @@ package run.stitch.blog.service;
 import run.stitch.blog.dto.ArticleTagDTO;
 
 public interface ArticleTagService {
-    void bind(ArticleTagDTO articleTagDTO);
+    boolean bind(ArticleTagDTO articleTagDTO);
 
-    void deleteByArticleId(Integer articleId);
+    boolean deleteByArticleId(Integer articleId);
 }

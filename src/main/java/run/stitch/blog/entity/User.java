@@ -21,11 +21,11 @@ public class User {
 
     private String username;
 
-    private String nickname;
-
     private String password;
 
     private String email;
+
+    private String avatarUrl;
 
     // 0-普通用户，1-管理员
     private Integer type;

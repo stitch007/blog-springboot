@@ -3,15 +3,15 @@ use blog;
 drop table if exists `user`;
 create table `user`
 (
-    `id`              int primary key     not null auto_increment,
-    `username`        varchar(128) unique not null comment '用户名',
-    `nickname`        varchar(128)        not null comment '用户昵称',
-    `password`        varchar(128)        not null comment '用户密码',
-    `email`           varchar(128) unique not null comment '邮箱',
-    `type`            tinyint(1)          not null comment '用户类型，0-普通用户，1-管理员',
-    `deleted`         tinyint(1)          not null default 0 comment '1-已删除，0-未删除',
-    `create_time`     datetime            not null default current_timestamp comment '创建时间',
-    `update_time`     datetime            not null default current_timestamp on update current_timestamp comment '更新时间',
+    `id`          int primary key     not null auto_increment,
+    `username`    varchar(128) unique not null comment '用户名',
+    `password`    varchar(128) comment '用户密码',
+    `email`       varchar(128) unique comment '邮箱',
+    `avatar_url`  varchar(128) comment '头像地址',
+    `type`        tinyint(1)          not null comment '用户类型，0-普通用户，1-管理员',
+    `deleted`     tinyint(1)          not null default 0 comment '1-已删除，0-未删除',
+    `create_time` datetime            not null default current_timestamp comment '创建时间',
+    `update_time` datetime            not null default current_timestamp on update current_timestamp comment '更新时间',
     key `index_username` (`username`(24)),
     key `index_email` (`email`(24))
 ) engine = InnoDB

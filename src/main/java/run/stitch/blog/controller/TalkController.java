@@ -2,13 +2,19 @@ package run.stitch.blog.controller;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import run.stitch.blog.dto.TalkDTO;
+import run.stitch.blog.dto.params.SaveTalkParam;
+import run.stitch.blog.dto.params.UpdateTalkParam;
 import run.stitch.blog.service.TalkService;
 import run.stitch.blog.util.Result;
 
 import java.util.HashMap;
 import java.util.List;
+
+import static run.stitch.blog.util.StatusCode.*;
 
 @RestController
 public class TalkController {
@@ -27,23 +33,25 @@ public class TalkController {
 
     @SaCheckRole("ADMIN")
     @PostMapping("/talks")
-    public Result<?> saveTalk(@RequestBody TalkDTO talkDTO) {
-        if (talkDTO.getId() != null) {
-            return Result.error(400, "新增操作不能携带id");
+    public Result<?> saveTalk(@RequestBody @Validated SaveTalkParam saveTalkParam) {
+        Integer id = talkService.saveTalk(saveTalkParam);
+        if (ObjectUtils.isEmpty(id)) {
+            return Result.error(FAIL);
         }
         return Result.ok(new HashMap<>() {{
-            put("id", talkService.saveOrUpdateTalk(talkDTO));
+            put("id", id);
         }});
     }
 
     @SaCheckRole("ADMIN")
     @PutMapping("/talks")
-    public Result<?> updateTalk(@RequestBody TalkDTO talkDTO) {
-        if (talkDTO.getId() == null) {
-            return Result.error(400, "修改操作必须携带id");
+    public Result<?> updateTalk(@RequestBody @Validated UpdateTalkParam updateTalkParam) {
+        Integer id = talkService.updateTalk(updateTalkParam);
+        if (ObjectUtils.isEmpty(id)) {
+            return Result.error(FAIL);
         }
         return Result.ok(new HashMap<>() {{
-            put("id", talkService.saveOrUpdateTalk(talkDTO));
+            put("id", id);
         }});
     }
 
@@ -53,6 +61,6 @@ public class TalkController {
         if (talkService.deleteTalks(ids)) {
             return Result.ok();
         }
-        return Result.error(500, "删除失败");
+        return Result.error(FAIL);
     }
 }

@@ -9,10 +9,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginDTO {
+public class UserDTO {
     private String username;
 
-    private String password;
+    private String avatarUrl;
 
-    private String code;
+    private String token;
+
+    private String role;
 }

@@ -12,6 +12,8 @@ import run.stitch.blog.service.TencentCosService;
 import java.io.File;
 import java.io.IOException;
 
+import static run.stitch.blog.util.StatusCode.*;
+
 @Service
 public class TencentCosServiceImpl implements TencentCosService {
     @Value("${spring.cos.base-url}")
@@ -33,7 +35,7 @@ public class TencentCosServiceImpl implements TencentCosService {
             PutObjectRequest objectRequest = new PutObjectRequest(bucket, fullName, localFile);
             cosClient.putObject(objectRequest);
         } catch (IOException e) {
-            throw new BizException(500, "上传文件失败");
+            throw new BizException(FAIL);
         }
         return baseUrl + '/' + fullName;
     }

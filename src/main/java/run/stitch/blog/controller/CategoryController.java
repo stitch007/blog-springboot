@@ -2,13 +2,19 @@ package run.stitch.blog.controller;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import run.stitch.blog.dto.CategoryDTO;
+import run.stitch.blog.dto.params.SaveCategoryParam;
+import run.stitch.blog.dto.params.UpdateCategoryParam;
 import run.stitch.blog.service.CategoryService;
 import run.stitch.blog.util.Result;
 
 import java.util.HashMap;
 import java.util.List;
+
+import static run.stitch.blog.util.StatusCode.FAIL;
 
 @RestController
 public class CategoryController {
@@ -27,32 +33,34 @@ public class CategoryController {
 
     @SaCheckRole("ADMIN")
     @PostMapping("/categories")
-    public Result<?> saveCategory(@RequestBody CategoryDTO categoryDTO) {
-        if (categoryDTO.getId() != null) {
-            return Result.error(403, "新增操作不能携带id");
+    public Result saveCategory(@RequestBody @Validated SaveCategoryParam saveCategoryParam) {
+        Integer id = categoryService.saveCategory(saveCategoryParam);
+        if (ObjectUtils.isEmpty(id)) {
+            return Result.error(FAIL);
         }
         return Result.ok(new HashMap<>() {{
-            put("id", categoryService.saveOrUpdateCategory(categoryDTO));
+            put("id", id);
         }});
     }
 
     @SaCheckRole("ADMIN")
     @PutMapping("/categories")
-    public Result<?> updateCategory(@RequestBody CategoryDTO categoryDTO) {
-        if (categoryDTO.getId() == null) {
-            return Result.error(403, "修改操作必须携带id");
+    public Result updateCategory(@RequestBody @Validated UpdateCategoryParam updateCategoryParam) {
+        Integer id = categoryService.updateCategory(updateCategoryParam);
+        if (ObjectUtils.isEmpty(id)) {
+            return Result.error(FAIL);
         }
         return Result.ok(new HashMap<>() {{
-            put("id", categoryService.saveOrUpdateCategory(categoryDTO));
+            put("id", id);
         }});
     }
 
     @SaCheckRole("ADMIN")
     @DeleteMapping("/categories/{ids}")
-    public Result<?> deleteCategories(@PathVariable("ids") String[] ids) {
+    public Result deleteCategories(@PathVariable("ids") String[] ids) {
         if (categoryService.deleteCategories(ids)) {
             return Result.ok();
         }
-        return Result.error(500, "删除失败");
+        return Result.error(FAIL);
     }
 }

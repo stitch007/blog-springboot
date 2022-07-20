@@ -3,14 +3,12 @@ package run.stitch.blog.controller;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import run.stitch.blog.dto.CategoryDTO;
-import run.stitch.blog.dto.params.SaveCategoryParam;
-import run.stitch.blog.dto.params.UpdateCategoryParam;
 import run.stitch.blog.service.CategoryService;
 import run.stitch.blog.util.Result;
 
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,8 +31,8 @@ public class CategoryController {
 
     @SaCheckRole("ADMIN")
     @PostMapping("/categories")
-    public Result saveCategory(@RequestBody @Validated SaveCategoryParam saveCategoryParam) {
-        Integer id = categoryService.saveCategory(saveCategoryParam);
+    public Result saveCategory(@RequestBody @NotNull CategoryDTO categoryDTO) {
+        Integer id = categoryService.saveOrUpdateCategory(categoryDTO);
         if (ObjectUtils.isEmpty(id)) {
             return Result.error(FAIL);
         }
@@ -45,8 +43,8 @@ public class CategoryController {
 
     @SaCheckRole("ADMIN")
     @PutMapping("/categories")
-    public Result updateCategory(@RequestBody @Validated UpdateCategoryParam updateCategoryParam) {
-        Integer id = categoryService.updateCategory(updateCategoryParam);
+    public Result updateCategory(@RequestBody @NotNull CategoryDTO categoryDTO) {
+        Integer id = categoryService.saveOrUpdateCategory(categoryDTO);
         if (ObjectUtils.isEmpty(id)) {
             return Result.error(FAIL);
         }

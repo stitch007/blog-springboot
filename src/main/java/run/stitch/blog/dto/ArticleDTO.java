@@ -25,10 +25,6 @@ public class ArticleDTO {
 
     private String content;
 
-    private String summary;
-
-    private String coverImage;
-
     private Date createTime;
 
     private Date updateTime;

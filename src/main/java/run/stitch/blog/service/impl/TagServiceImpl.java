@@ -1,14 +1,12 @@
 package run.stitch.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import run.stitch.blog.dto.TagDTO;
-import run.stitch.blog.dto.params.SaveTagParam;
-import run.stitch.blog.dto.params.UpdateTagParam;
 import run.stitch.blog.entity.Tag;
-import run.stitch.blog.exception.BizException;
 import run.stitch.blog.repository.TagRepository;
 import run.stitch.blog.service.TagService;
 import run.stitch.blog.util.Copy;
@@ -17,10 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static run.stitch.blog.util.StatusCode.*;
-
 @Service
-public class TagServiceImpl implements TagService {
+public class TagServiceImpl extends ServiceImpl<TagRepository, Tag> implements TagService {
     @Autowired
     TagRepository tagRepository;
 
@@ -37,26 +33,18 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Integer saveTag(SaveTagParam saveTagParam) {
-        Tag dbTag = tagRepository.selectOne(new LambdaQueryWrapper<Tag>().eq(Tag::getName, saveTagParam.getName()));
+    public Integer saveOrUpdateTag(TagDTO tagDTO) {
+        if (ObjectUtils.isEmpty(tagDTO.getName())) {
+            return null;
+        }
+        Tag dbTag = tagRepository.selectOne(new LambdaQueryWrapper<Tag>()
+                .select(Tag::getId)
+                .eq(Tag::getName, tagDTO.getName()));
         if (!ObjectUtils.isEmpty(dbTag)) {
-            throw new BizException(EXISTED);
+            return dbTag.getId();
         }
-        Tag tag = Tag.builder().name(saveTagParam.getName()).build();
-        if (tagRepository.insert(tag) > 0) {
-            return tag.getId();
-        }
-        return null;
-    }
-
-    @Override
-    public Integer updateTag(UpdateTagParam updateTagRequest) {
-        Tag dbTag = tagRepository.selectById(updateTagRequest.getId());
-        if (ObjectUtils.isEmpty(dbTag)) {
-            throw new BizException(NO_EXISTED);
-        }
-        Tag tag = Copy.copyObject(updateTagRequest, Tag.class);
-        if (tagRepository.updateById(tag) > 0) {
+        Tag tag = Copy.copyObject(tagDTO, Tag.class);
+        if (this.saveOrUpdate(tag)) {
             return tag.getId();
         }
         return null;
@@ -68,9 +56,9 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Integer> saveTags(List<UpdateTagParam> updateTagRequests) {
+    public List<Integer> saveTags(List<TagDTO> tagDTOs) {
         List<Integer> res = new ArrayList<>();
-        List<String> tagNames = new ArrayList<>(updateTagRequests.stream().map(UpdateTagParam::getName).toList());
+        List<String> tagNames = new ArrayList<>(tagDTOs.stream().map(TagDTO::getName).toList());
         if (!tagNames.isEmpty()) {
             List<Tag> dbTags = tagRepository.selectList(new LambdaQueryWrapper<Tag>().in(Tag::getName, tagNames));
             res.addAll(dbTags.stream().map(Tag::getId).toList());

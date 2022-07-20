@@ -1,14 +1,12 @@
 package run.stitch.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import run.stitch.blog.dto.CategoryDTO;
-import run.stitch.blog.dto.params.SaveCategoryParam;
-import run.stitch.blog.dto.params.UpdateCategoryParam;
 import run.stitch.blog.entity.Category;
-import run.stitch.blog.exception.BizException;
 import run.stitch.blog.repository.CategoryRepository;
 import run.stitch.blog.service.CategoryService;
 import run.stitch.blog.util.Copy;
@@ -16,10 +14,8 @@ import run.stitch.blog.util.Copy;
 import java.util.Arrays;
 import java.util.List;
 
-import static run.stitch.blog.util.StatusCode.*;
-
 @Service
-public class CategoryServiceImpl implements CategoryService {
+public class CategoryServiceImpl extends ServiceImpl<CategoryRepository, Category> implements CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 
@@ -36,27 +32,18 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Integer saveCategory(SaveCategoryParam saveCategoryParam) {
-        LambdaQueryWrapper wrapper = new LambdaQueryWrapper<Category>().eq(Category::getName, saveCategoryParam.getName());
-        Category dbCategory = categoryRepository.selectOne(wrapper);
+    public Integer saveOrUpdateCategory(CategoryDTO categoryDTO) {
+        if (ObjectUtils.isEmpty(categoryDTO.getName())) {
+            return null;
+        }
+        Category dbCategory = categoryRepository.selectOne(new LambdaQueryWrapper<Category>()
+                .select(Category::getId)
+                .eq(Category::getName, categoryDTO.getName()));
         if (!ObjectUtils.isEmpty(dbCategory)) {
-            throw new BizException(EXISTED);
+            return dbCategory.getId();
         }
-        Category category = Category.builder().name(saveCategoryParam.getName()).build();
-        if (categoryRepository.insert(category) > 0) {
-            return category.getId();
-        }
-        return null;
-    }
-
-    @Override
-    public Integer updateCategory(UpdateCategoryParam updateCategoryRequest) {
-        Category dbCategory = categoryRepository.selectById(updateCategoryRequest.getId());
-        if (ObjectUtils.isEmpty(dbCategory)) {
-            throw new BizException(NO_EXISTED);
-        }
-        Category category = Copy.copyObject(updateCategoryRequest, Category.class);
-        if (categoryRepository.updateById(category) >= 0) {
+        Category category = Copy.copyObject(categoryDTO, Category.class);
+        if (this.saveOrUpdate(category)) {
             return category.getId();
         }
         return null;

@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Length;
+import run.stitch.blog.dto.CategoryDTO;
+import run.stitch.blog.dto.TagDTO;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -16,10 +18,10 @@ import java.util.List;
 @NoArgsConstructor
 public class SaveArticleParam {
     @NotNull(message = "分类不能为空")
-    private UpdateCategoryParam category;
+    private CategoryDTO category;
 
     @NotNull(message = "标签不能为空")
-    private List<UpdateTagParam> tags;
+    private List<TagDTO> tags;
 
     @NotBlank(message = "文章标题不能为空")
     @Length(max = 128, message = "文章标题不能超过128个字符")

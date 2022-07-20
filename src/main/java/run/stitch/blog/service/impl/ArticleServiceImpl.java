@@ -7,10 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import run.stitch.blog.dto.ArticleDTO;
 import run.stitch.blog.dto.ArticleTagDTO;
+import run.stitch.blog.dto.TagDTO;
 import run.stitch.blog.dto.params.SaveArticleParam;
 import run.stitch.blog.dto.params.UpdateArticleParam;
-import run.stitch.blog.dto.params.UpdateCategoryParam;
-import run.stitch.blog.dto.params.UpdateTagParam;
 import run.stitch.blog.entity.Article;
 import run.stitch.blog.exception.BizException;
 import run.stitch.blog.repository.ArticleRepository;
@@ -61,7 +60,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     @Transactional
     public Integer saveArticle(SaveArticleParam saveArticleParam) {
-        Integer categoryId = this.saveOrUpdateCategory(saveArticleParam.getCategory());
+        Integer categoryId = categoryService.saveOrUpdateCategory(saveArticleParam.getCategory());
         if (ObjectUtils.isEmpty(categoryId)) {
             return null;
         }
@@ -71,7 +70,7 @@ public class ArticleServiceImpl implements ArticleService {
         if (articleRepository.insert(article) <= 0) {
             return null;
         }
-        if (!this.saveAndBindTags(article.getId(), saveArticleParam.getTags())) {
+        if (this.saveAndBindTags(article.getId(), saveArticleParam.getTags())) {
             return null;
         }
         return article.getId();
@@ -80,7 +79,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     @Transactional
     public Integer updateArticle(UpdateArticleParam updateArticleParam) {
-        Integer categoryId = this.saveOrUpdateCategory(updateArticleParam.getCategory());
+        Integer categoryId = categoryService.saveOrUpdateCategory(updateArticleParam.getCategory());
         if (ObjectUtils.isEmpty(categoryId)) {
             return null;
         }
@@ -89,7 +88,7 @@ public class ArticleServiceImpl implements ArticleService {
         if (articleRepository.updateById(article) < 0) {
             return null;
         }
-        if (!this.saveAndBindTags(article.getId(), updateArticleParam.getTags())) {
+        if (this.saveAndBindTags(article.getId(), updateArticleParam.getTags())) {
             return null;
         }
         return article.getId();
@@ -100,21 +99,11 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepository.deleteBatchIds(Arrays.asList(ids)) >= 0;
     }
 
-    private Integer saveOrUpdateCategory(UpdateCategoryParam updateCategoryRequest) {
-        Integer categoryId = null;
-        if (ObjectUtils.isEmpty(updateCategoryRequest.getId())) {
-            categoryId = categoryService.saveCategory(updateCategoryRequest);
-        } else {
-            categoryId = categoryService.updateCategory(updateCategoryRequest);
-        }
-        return categoryId;
-    }
-
-    private boolean saveAndBindTags(Integer articleId, List<UpdateTagParam> updateTagRequests) {
-        List<Integer> tagIds = tagService.saveTags(updateTagRequests);
+    private boolean saveAndBindTags(Integer articleId, List<TagDTO> tagDTOs) {
+        List<Integer> tagIds = tagService.saveTags(tagDTOs);
         if (ObjectUtils.isEmpty(tagIds)) {
-            return false;
+            return true;
         }
-        return articleTagService.bind(ArticleTagDTO.builder().articleId(articleId).tagIds(tagIds).build());
+        return !articleTagService.bind(ArticleTagDTO.builder().articleId(articleId).tagIds(tagIds).build());
     }
 }

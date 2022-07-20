@@ -1,8 +1,6 @@
 package run.stitch.blog.service;
 
 import run.stitch.blog.dto.TagDTO;
-import run.stitch.blog.dto.params.SaveTagParam;
-import run.stitch.blog.dto.params.UpdateTagParam;
 
 import java.util.List;
 
@@ -11,11 +9,9 @@ public interface TagService {
 
     List<TagDTO> getTagsByIds(String[] ids);
 
-    Integer saveTag(SaveTagParam saveTagParam);
+    Integer saveOrUpdateTag(TagDTO tagDTO);
 
-    Integer updateTag(UpdateTagParam updateTagRequest);
-
-    List<Integer> saveTags(List<UpdateTagParam> updateTagRequests);
+    List<Integer> saveTags(List<TagDTO> tagDTOs);
 
     Boolean deleteTags(String[] ids);
 }

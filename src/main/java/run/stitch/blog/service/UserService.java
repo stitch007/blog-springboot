@@ -7,7 +7,7 @@ import run.stitch.blog.dto.UserDTO;
 
 import java.awt.image.BufferedImage;
 
-public interface UserAuthService {
+public interface UserService {
     Role getRole(Integer userId);
 
     BufferedImage createCaptcha();
@@ -15,4 +15,6 @@ public interface UserAuthService {
     UserDTO login(LoginParam loginParam);
 
     UserDTO giteeLogin(OauthLoginParam oauthLoginParam);
+
+    UserDTO getUserInfo(Integer userId);
 }

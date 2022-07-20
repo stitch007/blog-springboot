@@ -5,7 +5,6 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.google.code.kaptcha.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,14 +13,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import run.stitch.blog.constant.Role;
+import run.stitch.blog.dto.UserDTO;
 import run.stitch.blog.dto.params.LoginParam;
 import run.stitch.blog.dto.params.OauthLoginParam;
-import run.stitch.blog.dto.UserDTO;
 import run.stitch.blog.entity.User;
 import run.stitch.blog.exception.BizException;
 import run.stitch.blog.repository.UserRepository;
-import run.stitch.blog.service.UserAuthService;
+import run.stitch.blog.service.UserService;
 import run.stitch.blog.util.Captcha;
+import run.stitch.blog.util.Copy;
 
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 import static run.stitch.blog.util.StatusCode.*;
 
 @Service
-public class UserAuthServiceImpl implements UserAuthService {
+public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -101,17 +101,26 @@ public class UserAuthServiceImpl implements UserAuthService {
         return null;
     }
 
+    @Override
+    public UserDTO getUserInfo(Integer userId) {
+        User user = userRepository.selectById(userId);
+        UserDTO userDTO = Copy.copyObject(user, UserDTO.class);
+        userDTO.setRole(String.join(",", StpUtil.getRoleList()));
+        userDTO.setToken(StpUtil.getTokenValue());
+        return userDTO;
+    }
+
     public Boolean saveOrUpdateUser(User user) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<User>()
                 .eq(User::getUsername, user.getUsername());
         User dbUser = userRepository.selectOne(wrapper);
         if (ObjectUtils.isEmpty(dbUser)) {
+
             user.setType(0);
             return userRepository.insert(user) > 0;
         }
-        LambdaUpdateWrapper<User> updateWrapper = new LambdaUpdateWrapper<User>()
-                .eq(User::getUsername, user.getUsername());
-        return userRepository.update(user, updateWrapper) >= 0;
+        user.setId(dbUser.getId());
+        return userRepository.updateById(user) >= 0;
     }
 
     private User check(String username, String password, String code) {

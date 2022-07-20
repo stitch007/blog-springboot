@@ -3,18 +3,16 @@ package run.stitch.blog.controller;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import run.stitch.blog.dto.TagDTO;
-import run.stitch.blog.dto.params.SaveTagParam;
-import run.stitch.blog.dto.params.UpdateTagParam;
 import run.stitch.blog.service.TagService;
 import run.stitch.blog.util.Result;
 
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
 
-import static run.stitch.blog.util.StatusCode.*;
+import static run.stitch.blog.util.StatusCode.FAIL;
 
 @RestController
 public class TagController {
@@ -33,8 +31,8 @@ public class TagController {
 
     @SaCheckRole("ADMIN")
     @PostMapping("/tags")
-    public Result saveTag(@RequestBody @Validated SaveTagParam saveTagParam) {
-        Integer id = tagService.saveTag(saveTagParam);
+    public Result saveTag(@RequestBody @NotNull TagDTO tagDTO) {
+        Integer id = tagService.saveOrUpdateTag(tagDTO);
         if (ObjectUtils.isEmpty(id)) {
             return Result.error(FAIL);
         }
@@ -45,8 +43,8 @@ public class TagController {
 
     @SaCheckRole("ADMIN")
     @PutMapping("/tags")
-    public Result updateTag(@RequestBody @Validated UpdateTagParam updateTagParam) {
-        Integer id = tagService.updateTag(updateTagParam);
+    public Result updateTag(@RequestBody @NotNull TagDTO tagDTO) {
+        Integer id = tagService.saveOrUpdateTag(tagDTO);
         if (ObjectUtils.isEmpty(id)) {
             return Result.error(FAIL);
         }

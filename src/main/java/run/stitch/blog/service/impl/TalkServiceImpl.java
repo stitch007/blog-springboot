@@ -10,7 +10,7 @@ import run.stitch.blog.dto.params.UpdateTalkParam;
 import run.stitch.blog.entity.Talk;
 import run.stitch.blog.repository.TalkRepository;
 import run.stitch.blog.service.TalkService;
-import run.stitch.blog.util.Copy;
+import run.stitch.blog.utils.CopyUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,18 +23,18 @@ public class TalkServiceImpl implements TalkService {
     @Override
     public List<TalkDTO> getTalks() {
         List<Talk> talks = talkRepository.selectList(new LambdaQueryWrapper<Talk>().orderByDesc(Talk::getCreateTime));
-        return Copy.copyList(talks, TalkDTO.class);
+        return CopyUtil.copyList(talks, TalkDTO.class);
     }
 
     @Override
     public List<TalkDTO> getTalksByIds(String[] ids) {
         List<Talk> talks = talkRepository.selectBatchIds(Arrays.asList(ids));
-        return Copy.copyList(talks, TalkDTO.class);
+        return CopyUtil.copyList(talks, TalkDTO.class);
     }
 
     @Override
     public Integer saveTalk(SaveTalkParam saveTalkParam) {
-        Talk talk = Copy.copyObject(saveTalkParam, Talk.class);
+        Talk talk = CopyUtil.copyObject(saveTalkParam, Talk.class);
         talk.setUserId(Integer.parseInt(StpUtil.getLoginId().toString()));
         if (talkRepository.insert(talk) > 0) {
             return talk.getId();
@@ -44,7 +44,7 @@ public class TalkServiceImpl implements TalkService {
 
     @Override
     public Integer updateTalk(UpdateTalkParam updateTalkParam) {
-        Talk talk = Copy.copyObject(updateTalkParam, Talk.class);
+        Talk talk = CopyUtil.copyObject(updateTalkParam, Talk.class);
         if (talkRepository.updateById(talk) >= 0) {
             return talk.getId();
         }

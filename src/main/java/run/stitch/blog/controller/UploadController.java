@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import run.stitch.blog.service.TencentCosService;
-import run.stitch.blog.util.Result;
+import run.stitch.blog.dto.Result;
 
 import java.util.HashMap;
 
-import static run.stitch.blog.util.StatusCode.*;
+import static run.stitch.blog.enums.StatusCodeEnum.*;
 
 @RestController
 public class UploadController {

@@ -1,6 +1,6 @@
 package run.stitch.blog.exception;
 
-import run.stitch.blog.util.StatusCode;
+import run.stitch.blog.enums.StatusCodeEnum;
 
 public class BizException extends RuntimeException {
     private final Integer code;
@@ -10,9 +10,9 @@ public class BizException extends RuntimeException {
         this.code = code;
     }
 
-    public BizException(StatusCode statusCode) {
-        super(statusCode.getMessage());
-        this.code = statusCode.getCode();
+    public BizException(StatusCodeEnum statusCodeEnum) {
+        super(statusCodeEnum.getMessage());
+        this.code = statusCodeEnum.getCode();
     }
 
     public Integer getCode() {

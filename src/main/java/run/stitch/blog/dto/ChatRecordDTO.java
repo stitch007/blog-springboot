@@ -5,18 +5,24 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class ChatRecordDTO {
     private Integer id;
+
+    private Integer userId;
 
     private String username;
 
     private String avatarUrl;
 
-    private String token;
+    private Integer type;
 
-    private String role;
+    private String content;
+
+    private Date createTime;
 }

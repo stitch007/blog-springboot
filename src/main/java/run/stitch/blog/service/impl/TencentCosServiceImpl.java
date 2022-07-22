@@ -12,7 +12,7 @@ import run.stitch.blog.service.TencentCosService;
 import java.io.File;
 import java.io.IOException;
 
-import static run.stitch.blog.util.StatusCode.*;
+import static run.stitch.blog.enums.StatusCodeEnum.*;
 
 @Service
 public class TencentCosServiceImpl implements TencentCosService {

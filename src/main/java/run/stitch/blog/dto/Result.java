@@ -1,10 +1,11 @@
-package run.stitch.blog.util;
+package run.stitch.blog.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import run.stitch.blog.enums.StatusCodeEnum;
 
-import static run.stitch.blog.util.StatusCode.*;
+import static run.stitch.blog.enums.StatusCodeEnum.*;
 
 @Data
 @AllArgsConstructor
@@ -28,12 +29,12 @@ public class Result<T> {
         return new Result<>(SUCCESS.getCode(), message, data);
     }
 
-    public static <T> Result<T> ok(StatusCode statusCode) {
-        return new Result<>(statusCode.getCode(), statusCode.getMessage(), null);
+    public static <T> Result<T> ok(StatusCodeEnum statusCodeEnum) {
+        return new Result<>(statusCodeEnum.getCode(), statusCodeEnum.getMessage(), null);
     }
 
-    public static <T> Result<T> ok(StatusCode statusCode, T data) {
-        return new Result<>(statusCode.getCode(), statusCode.getMessage(), data);
+    public static <T> Result<T> ok(StatusCodeEnum statusCodeEnum, T data) {
+        return new Result<>(statusCodeEnum.getCode(), statusCodeEnum.getMessage(), data);
     }
 
     public static <T> Result<T> error(int code, String message) {
@@ -44,11 +45,11 @@ public class Result<T> {
         return new Result<>(code, message, data);
     }
 
-    public static <T> Result<T> error(StatusCode statusCode) {
-        return new Result<>(statusCode.getCode(), statusCode.getMessage(), null);
+    public static <T> Result<T> error(StatusCodeEnum statusCodeEnum) {
+        return new Result<>(statusCodeEnum.getCode(), statusCodeEnum.getMessage(), null);
     }
 
-    public static <T> Result<T> error(StatusCode statusCode, T data) {
-        return new Result<>(statusCode.getCode(), statusCode.getMessage(), data);
+    public static <T> Result<T> error(StatusCodeEnum statusCodeEnum, T data) {
+        return new Result<>(statusCodeEnum.getCode(), statusCodeEnum.getMessage(), data);
     }
 }

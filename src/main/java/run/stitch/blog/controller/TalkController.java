@@ -9,12 +9,12 @@ import run.stitch.blog.dto.TalkDTO;
 import run.stitch.blog.dto.params.SaveTalkParam;
 import run.stitch.blog.dto.params.UpdateTalkParam;
 import run.stitch.blog.service.TalkService;
-import run.stitch.blog.util.Result;
+import run.stitch.blog.dto.Result;
 
 import java.util.HashMap;
 import java.util.List;
 
-import static run.stitch.blog.util.StatusCode.*;
+import static run.stitch.blog.enums.StatusCodeEnum.*;
 
 @RestController
 public class TalkController {

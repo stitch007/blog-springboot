@@ -6,13 +6,13 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import run.stitch.blog.dto.TagDTO;
 import run.stitch.blog.service.TagService;
-import run.stitch.blog.util.Result;
+import run.stitch.blog.dto.Result;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
 
-import static run.stitch.blog.util.StatusCode.FAIL;
+import static run.stitch.blog.enums.StatusCodeEnum.FAIL;
 
 @RestController
 public class TagController {

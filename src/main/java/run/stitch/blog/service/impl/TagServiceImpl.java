@@ -9,7 +9,7 @@ import run.stitch.blog.dto.TagDTO;
 import run.stitch.blog.entity.Tag;
 import run.stitch.blog.repository.TagRepository;
 import run.stitch.blog.service.TagService;
-import run.stitch.blog.util.Copy;
+import run.stitch.blog.utils.CopyUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,13 +23,13 @@ public class TagServiceImpl extends ServiceImpl<TagRepository, Tag> implements T
     @Override
     public List<TagDTO> getTags() {
         List<Tag> tags = tagRepository.selectList(new LambdaQueryWrapper<Tag>().select(Tag::getId, Tag::getName));
-        return Copy.copyList(tags, TagDTO.class);
+        return CopyUtil.copyList(tags, TagDTO.class);
     }
 
     @Override
     public List<TagDTO> getTagsByIds(String[] ids) {
         List<Tag> tags = tagRepository.selectBatchIds(Arrays.asList(ids));
-        return Copy.copyList(tags, TagDTO.class);
+        return CopyUtil.copyList(tags, TagDTO.class);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class TagServiceImpl extends ServiceImpl<TagRepository, Tag> implements T
         if (!ObjectUtils.isEmpty(dbTag)) {
             return dbTag.getId();
         }
-        Tag tag = Copy.copyObject(tagDTO, Tag.class);
+        Tag tag = CopyUtil.copyObject(tagDTO, Tag.class);
         if (this.saveOrUpdate(tag)) {
             return tag.getId();
         }

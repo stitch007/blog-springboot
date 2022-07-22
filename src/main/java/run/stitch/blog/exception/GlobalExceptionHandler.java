@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
-import run.stitch.blog.util.Result;
+import run.stitch.blog.dto.Result;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
 
-import static run.stitch.blog.util.StatusCode.*;
+import static run.stitch.blog.enums.StatusCodeEnum.*;
 
 @RestControllerAdvice
 @Slf4j

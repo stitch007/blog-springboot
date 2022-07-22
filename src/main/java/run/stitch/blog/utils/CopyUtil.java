@@ -1,4 +1,4 @@
-package run.stitch.blog.util;
+package run.stitch.blog.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class Copy {
+public class CopyUtil {
     public static <T> T copyObject(Object source, Class<T> clazz) {
         T result = null;
         try {

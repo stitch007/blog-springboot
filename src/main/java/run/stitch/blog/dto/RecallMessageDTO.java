@@ -9,14 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class RecallMessageDTO {
     private Integer id;
 
-    private String username;
-
-    private String avatarUrl;
-
     private String token;
-
-    private String role;
 }

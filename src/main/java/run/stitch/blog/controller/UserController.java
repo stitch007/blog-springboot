@@ -14,14 +14,14 @@ import run.stitch.blog.dto.UserDTO;
 import run.stitch.blog.dto.params.LoginParam;
 import run.stitch.blog.dto.params.OauthLoginParam;
 import run.stitch.blog.service.UserService;
-import run.stitch.blog.util.Result;
+import run.stitch.blog.dto.Result;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static run.stitch.blog.util.StatusCode.LOGIN_FAIL;
+import static run.stitch.blog.enums.StatusCodeEnum.LOGIN_FAIL;
 
 @RestController
 public class UserController {

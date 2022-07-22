@@ -9,14 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
-    private Integer id;
+public class WebSocketMessageDTO {
+    private Integer type;
 
-    private String username;
-
-    private String avatarUrl;
-
-    private String token;
-
-    private String role;
+    private Object data;
 }

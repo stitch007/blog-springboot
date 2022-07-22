@@ -1,10 +1,10 @@
-package run.stitch.blog.util;
+package run.stitch.blog.utils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-public class Captcha {
+public class CaptchaUtil {
     private static final int WIDTH = 300;
     private static final int HEIGHT = 75;
 

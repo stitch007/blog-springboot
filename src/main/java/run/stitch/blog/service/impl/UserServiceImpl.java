@@ -20,15 +20,15 @@ import run.stitch.blog.entity.User;
 import run.stitch.blog.exception.BizException;
 import run.stitch.blog.repository.UserRepository;
 import run.stitch.blog.service.UserService;
-import run.stitch.blog.util.Captcha;
-import run.stitch.blog.util.Copy;
+import run.stitch.blog.utils.CaptchaUtil;
+import run.stitch.blog.utils.CopyUtil;
 
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static run.stitch.blog.util.StatusCode.*;
+import static run.stitch.blog.enums.StatusCodeEnum.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public BufferedImage createCaptcha() {
         BufferedImage image = new BufferedImage(200, 60, BufferedImage.TYPE_INT_RGB);
-        String randomText = Captcha.drawRandomText(image);
+        String randomText = CaptchaUtil.drawRandomText(image);
         redisTemplate.opsForValue().set(Constants.KAPTCHA_SESSION_KEY, randomText, 60, TimeUnit.SECONDS);
         return image;
     }
@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUserInfo(Integer userId) {
         User user = userRepository.selectById(userId);
-        UserDTO userDTO = Copy.copyObject(user, UserDTO.class);
+        UserDTO userDTO = CopyUtil.copyObject(user, UserDTO.class);
         userDTO.setRole(String.join(",", StpUtil.getRoleList()));
         userDTO.setToken(StpUtil.getTokenValue());
         return userDTO;
@@ -152,6 +152,7 @@ public class UserServiceImpl implements UserService {
     private UserDTO login(User user) {
         StpUtil.login(user.getId());
         UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
         userDTO.setUsername(user.getUsername());
         userDTO.setAvatarUrl(user.getAvatarUrl());
         userDTO.setToken(StpUtil.getTokenValue());

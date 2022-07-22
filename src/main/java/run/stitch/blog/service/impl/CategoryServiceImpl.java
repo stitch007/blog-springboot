@@ -9,7 +9,7 @@ import run.stitch.blog.dto.CategoryDTO;
 import run.stitch.blog.entity.Category;
 import run.stitch.blog.repository.CategoryRepository;
 import run.stitch.blog.service.CategoryService;
-import run.stitch.blog.util.Copy;
+import run.stitch.blog.utils.CopyUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,13 +22,13 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryRepository, Categor
     @Override
     public List<CategoryDTO> getCategories() {
         List<Category> categories = categoryRepository.selectList(new LambdaQueryWrapper<Category>().select(Category::getId, Category::getName));
-        return Copy.copyList(categories, CategoryDTO.class);
+        return CopyUtil.copyList(categories, CategoryDTO.class);
     }
 
     @Override
     public List<CategoryDTO> getCategoriesByIds(String[] ids) {
         List<Category> categories = categoryRepository.selectBatchIds(Arrays.asList(ids));
-        return Copy.copyList(categories, CategoryDTO.class);
+        return CopyUtil.copyList(categories, CategoryDTO.class);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryRepository, Categor
         if (!ObjectUtils.isEmpty(dbCategory)) {
             return dbCategory.getId();
         }
-        Category category = Copy.copyObject(categoryDTO, Category.class);
+        Category category = CopyUtil.copyObject(categoryDTO, Category.class);
         if (this.saveOrUpdate(category)) {
             return category.getId();
         }

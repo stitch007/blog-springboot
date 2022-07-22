@@ -1,11 +1,11 @@
-package run.stitch.blog.util;
+package run.stitch.blog.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum StatusCode {
+public enum StatusCodeEnum {
     SUCCESS(20000, "操作成功"),
     NO_LOGIN(40100, "用户未登录"),
     LOGIN_FAIL(40101, "登录失败"),

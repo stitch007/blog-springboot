@@ -17,12 +17,12 @@ import run.stitch.blog.service.ArticleService;
 import run.stitch.blog.service.ArticleTagService;
 import run.stitch.blog.service.CategoryService;
 import run.stitch.blog.service.TagService;
-import run.stitch.blog.util.Copy;
+import run.stitch.blog.utils.CopyUtil;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static run.stitch.blog.util.StatusCode.*;
+import static run.stitch.blog.enums.StatusCodeEnum.*;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -64,7 +64,7 @@ public class ArticleServiceImpl implements ArticleService {
         if (ObjectUtils.isEmpty(categoryId)) {
             return null;
         }
-        Article article = Copy.copyObject(saveArticleParam, Article.class);
+        Article article = CopyUtil.copyObject(saveArticleParam, Article.class);
         article.setCategoryId(categoryId);
         article.setUserId(Integer.parseInt(StpUtil.getLoginId().toString()));
         if (articleRepository.insert(article) <= 0) {
@@ -83,7 +83,7 @@ public class ArticleServiceImpl implements ArticleService {
         if (ObjectUtils.isEmpty(categoryId)) {
             return null;
         }
-        Article article = Copy.copyObject(updateArticleParam, Article.class);
+        Article article = CopyUtil.copyObject(updateArticleParam, Article.class);
         article.setCategoryId(categoryId);
         if (articleRepository.updateById(article) < 0) {
             return null;

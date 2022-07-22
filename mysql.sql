@@ -90,3 +90,20 @@ create table `talk`
   auto_increment = 1
   default charset = utf8mb4
   collate = utf8mb4_bin;
+
+drop table if exists `chat_record`;
+create table `chat_record`
+(
+    `id`          int primary key not null auto_increment,
+    `user_id`     int                      default null comment '用户id',
+    `username`    varchar(128)             default null comment '用户名',
+    `avatar_url`  varchar(128)             default null comment '用户头像',
+    `type`        tinyint         not null comment '消息类型',
+    `content`     varchar(1024)   not null comment '消息内容',
+    `deleted`     tinyint(1)      not null default 0 not null comment '1-已删除，0-未删除',
+    `create_time` datetime        not null default current_timestamp comment '创建时间',
+    `update_time` datetime        not null default current_timestamp on update current_timestamp comment '更新时间'
+) engine = InnoDB
+  auto_increment = 1
+  default charset = utf8mb4
+  collate = utf8mb4_bin;

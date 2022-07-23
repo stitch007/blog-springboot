@@ -25,8 +25,6 @@ public class ChatRecord {
 
     private String avatarUrl;
 
-    private Integer type;
-
     private String content;
 
     // 1-已删除，0-未删除

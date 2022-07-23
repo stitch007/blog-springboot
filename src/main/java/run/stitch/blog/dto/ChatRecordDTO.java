@@ -20,8 +20,6 @@ public class ChatRecordDTO {
 
     private String avatarUrl;
 
-    private Integer type;
-
     private String content;
 
     private Date createTime;

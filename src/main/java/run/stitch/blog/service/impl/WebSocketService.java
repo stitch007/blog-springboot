@@ -41,7 +41,7 @@ public class WebSocketService {
     private static ConcurrentHashMap<Integer, Session> sessionMap = new ConcurrentHashMap<>();
 
     @Autowired
-    public void setChatRecordDao(ChatRecordRepository chatRecordRepository) {
+    public void setChatRecordRepository(ChatRecordRepository chatRecordRepository) {
         WebSocketService.chatRecordRepository = chatRecordRepository;
     }
 
@@ -100,6 +100,8 @@ public class WebSocketService {
             // 插入到数据库中
             ChatRecord chatRecord = CopyUtil.copyObject(chatRecordDTO, ChatRecord.class);
             chatRecordRepository.insert(chatRecord);
+            chatRecordDTO.setId(chatRecord.getId());
+            chatRecordDTO.setCreateTime(chatRecord.getCreateTime());
             messageDTO.setData(chatRecordDTO);
             // 广播消息
             broadcastMessage(messageDTO);
